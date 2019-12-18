@@ -1,0 +1,44 @@
+section {
+    /* margin: 50px 50px; */
+    border: 70px white solid;
+    background-color: teal;
+    padding: 50px;
+    max-width: 800px;
+}
+
+#buttContainer {
+    padding: 0px 150px;
+}
+
+.slider {
+    width: 70%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 50px;
+}
+
+.button {
+    margin-bottom: 30px;
+}
+
+.ui-slider-handle {
+    background-color: black !important;
+}
+
+.reverseBox {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+#dropZone {
+    display: flex;
+    text-align: center;
+    height: 50px;
+    justify-content: space-around;
+    align-items: center;
+}
+
+#defaultCanvas0 {
+    width: 0px;
+}
