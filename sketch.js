@@ -1,37 +1,22 @@
 let player;
-let scl = 100;
-let scl2 = 50;
-let scl4 = 25;
-let isTriggered = false;
 let samp;
 let reverb, delay, chorus, compressor, filter;
 let dropzone;
 let sound;
-let detuneSliderVal = 0;
-let grainSizeSliderVal = 0.5;
-let overlapSliderVal = 0.1;
-let rateSliderVal = 1;
-let startSliderVal = 0;
-let endSliderVal = 1;
 let sampDuration;
-
 
 function preload() {
     samp = loadSound('loops/loop0.wav');
 }
 
 function setup() {
-    noCanvas();
     dropzone = select('#dropZone');
     initFX();
-    frameRate(30);
     dropzone.drop(gotFile);
     sampDuration = samp.buffer.duration;
-    endSliderVal = sampDuration;
     player = new Player();
     player.loadSamp(samp.url);
     player.player.chain(delay, filter);
-    player.settings();
 
     $('#rangeSlider').slider({
         range: true,
@@ -40,77 +25,47 @@ function setup() {
         step: 0.01,
         values: [0, sampDuration],
         slide: function() {
-            startSliderVal = ($(this).slider('values', 0));
-            endSliderVal = ($(this).slider('values', 1));
-            player.settings();
+            player.player.loopStart = ($(this).slider('values', 0));
+            player.player.loopEnd = ($(this).slider('values', 1));
         }
     });
-}
 
-// JQUERY STuFfs
-$(function() {
-
-    let $detuneSlider = $("#detuneSlider").slider({
+    $("#detuneSlider").slider({
         max: 1200,
-        min: -1200
+        min: -1200,
+        slide: function(){
+        player.player.detune = ($(this).slider('value'));
+        }
     });
-    let $grainSizeSlider = $('#grainSizeSlider').slider({
-        max: 2,
-        min: 0.01,
-        step: 0.01,
-        value: 0.5
-    });
-    let $overlapSlider = $('#overlapSlider').slider({
-        max: 2,
-        min: 0.01,
-        step: 0.01,
-        value: 0.1
-    });
-    let $rateSlider = $('#rateSlider').slider({
+
+    $('#rateSlider').slider({
         max: 2,
         min: 0.000001,
         step: 0.125,
-        value: 1
+        value: 1,
+        slide: function(){
+          player.player.playbackRate = ($(this).slider('value'));
+        }
     });
-    let $startSlider = $('#startSlider').slider({
-        max: 1,
-        min: 0,
-        step: 0.01,
-        value: 0
+
+    $('#grainSizeSlider').slider({
+      max: 2,
+      min: 0.01,
+      step: 0.01,
+      value: 0.5,
+      slide: function(){
+        player.player.grainSize = ($(this).slider('value'));
+      }
     });
-    let $endSlider = $('#endSlider').slider({
-        max: 4,
-        min: 0,
-        step: 0.01,
-        value: 4
-    });
-    // $('#rangeSlider').slider({
-    //     range: true,
-    //     min: 0,
-    //     max: 1,
-    //     step: 0.01,
-    //     values: [0, 1],
-    //     slide: function() {
-    //         startSliderVal = ($(this).slider('values', 0));
-    //         endSliderVal = ($(this).slider('values', 1));
-    //         player.settings();
-    //     }
-    // });
-    $($detuneSlider).on('slide', function() {
-        detuneSliderVal = ($($detuneSlider).slider('value'));
-        player.settings();
-    });
-    $($grainSizeSlider).on('slide', function() {
-        grainSizeSliderVal = ($($grainSizeSlider).slider('value'));
-        player.settings();
-    });
-    $($overlapSlider).on('slide', function() {
-        overlapSliderVal = ($($overlapSlider).slider('value'));
-        player.settings();
-    });
-    $($rateSlider).on('slide', function() {
-        rateSliderVal = ($($rateSlider).slider('value'));
-        player.settings();
+
+    $('#overlapSlider').slider({
+      max: 2,
+      min: 0.01,
+      step: 0.01,
+      value: 0.1,
+      slide: function(){
+        player.player.overlap = ($(this).slider('value'));
+      }
     });
 
     $('#checkbox-1').checkboxradio({
@@ -131,30 +86,12 @@ $(function() {
     $('#stopButton').on('click', function() {
         player.stop();
     });
-});
-
-function draw() {
-    background(200);
 }
-
-// function mousePressed() {
-//     player.start();
-// }
 
 class Player {
     constructor() {
         this.player = new Tone.GrainPlayer();
-    }
-
-    settings() {
-        this.player.playbackRate = rateSliderVal;
-        this.player.detune = detuneSliderVal;
-        this.player.grainSize = grainSizeSliderVal;
-        this.player.overlap = overlapSliderVal;
         this.player.loop = true;
-        this.player.loopStart = startSliderVal;
-        this.player.loopEnd = endSliderVal;
-        // this.player.reverse = false;
     }
 
     start() {
@@ -185,7 +122,6 @@ function initFX() {
     delay = new Tone.PingPongDelay().connect(compressor);
     chorus = new Tone.Chorus().connect(compressor);
     filter = new Tone.Filter(1000, 'lowpass').connect(compressor);
-
     delay.wet.value = 1;
     delay.delayTime.value = "16n";
     delay.feedback.value = 0.5;
@@ -198,9 +134,7 @@ function initFX() {
 }
 
 function gotFile(file) {
-    // console.log('got file');
     sound = loadSound(file.data, loadIt);
-    // console.log(sound);
 }
 
 function loadIt() {
