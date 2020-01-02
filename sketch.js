@@ -1,3 +1,9 @@
+//console.log(stuff)
+// if you are not using a varibale just get rid of it.
+// put your logic somewhere else than ui
+// link diffrent js files to your html
+
+
 let player;
 let scl = 100;
 let scl2 = 50;
@@ -84,18 +90,6 @@ $(function() {
         step: 0.01,
         value: 4
     });
-    // $('#rangeSlider').slider({
-    //     range: true,
-    //     min: 0,
-    //     max: 1,
-    //     step: 0.01,
-    //     values: [0, 1],
-    //     slide: function() {
-    //         startSliderVal = ($(this).slider('values', 0));
-    //         endSliderVal = ($(this).slider('values', 1));
-    //         player.settings();
-    //     }
-    // });
     $($detuneSlider).on('slide', function() {
         detuneSliderVal = ($($detuneSlider).slider('value'));
         player.settings();
