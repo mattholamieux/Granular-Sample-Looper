@@ -1,0 +1,61 @@
+
+
+
+
+#tabs-1{
+  margin-top: 5px;
+  padding-top: 50px;
+  background-color: gray;
+}
+
+label {
+  font-size: 10px;
+  /* font-family: 'SFAlien'; */
+}
+
+
+.row {
+  display: flex;
+  align-items: center;
+}
+
+.slider {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.button {
+}
+
+.ui-slider-handle {
+    /* background-color: black !important; */
+}
+
+#custom-handle {
+    width: 3em;
+    height: 1.6em;
+    top: 50%;
+    margin-top: -.8em;
+    text-align: center;
+    line-height: 1.6em;
+    border: 1px solid gray;
+  }
+
+.sliderValBox{
+  border: 0;
+  background: transparent;
+  font-size: 10px !important;
+  width: 100%;
+  margin-bottom: .5rem;
+  }
+
+.reverseBox {
+    display: flex;
+    justify-content: center;
+}
+
+
+#defaultCanvas0 {
+    width: 0px;
+}
