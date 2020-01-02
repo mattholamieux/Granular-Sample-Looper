@@ -2,59 +2,121 @@
 <html>
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="libraries/style.css" type="text/css" rel="stylesheet">
-    <link href="libraries/jquery-ui.min.css" type="text/css" rel="stylesheet">
-    <title>GrainPlayer</title>
-    <script src="libraries/jquery-3.4.1.min.js"></script>
-    <script src="libraries/jquery-ui.min.js"></script>
-    <script src="sketch.js"></script>
-    <script src="libraries/p5.js"></script>
-    <script src="libraries/p5.dom.js"></script>
-    <script src="libraries/p5.sound.js"></script>
-    <script src="libraries/Tone.js"></script>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="style.css" type="text/css" rel="stylesheet">
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" type="text/css" rel="stylesheet">
+  <link href="libraries/jquery-ui.min.css" type="text/css" rel="stylesheet">
+  <title>GrainPlayer</title>
+  <script src="libraries/jquery-3.4.1.min.js"></script>
+  <script src="libraries/jquery-ui.min.js"></script>
+  <script src="sketch.js"></script>
+  <script src="libraries/p5.js"></script>
+  <script src="libraries/p5.dom.js"></script>
+  <script src="libraries/p5.sound.js"></script>
+  <script src="libraries/Tone.js"></script>
 
 
 
 
-    <script>
-        window.addEventListener("keydown", function(e) {
+  <script>
+    window.addEventListener("keydown", function(e) {
             if ([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
                 e.preventDefault();
             }
         }, false);
     </script>
 
-    <style>
+  <style>
 
-    </style>
+  </style>
 </head>
 
 <body>
-    <section class="firstSection">
-        <div id="buttContainer" style="display: flex; justify-content: space-around">
+  <div class="container-fluid">
+    <div id="tabs">
+      <ul>
+        <li><a href="#tabs-1">Player</a></li>
+        <li><a href="#tabs-2">Effects</a></li>
+        <li><a href="#tabs-3">Mixer</a></li>
+      </ul>
+
+      <section class="firstSection ui-corner-all" id="tabs-1">
+        <div class="row mb-5">
+          <div class="col-9 offset-2 d-flex justify-content-around">
             <div id="startButton" class="button ui-button ui-corner-all">Start</div>
             <div class="reverseBox">
-                <label for="checkbox-1">Reverse</label>
-                <input type="checkbox" name="checkbox-1" id="checkbox-1">
+              <label for="checkbox-1" class="mb-0">Reverse</label>
+              <input type="checkbox" name="checkbox-1" id="checkbox-1">
             </div>
             <div id="stopButton" class="button ui-button ui-corner-all">Stop</div>
+          </div>
         </div>
-        <div id="rangeSlider" class="slider"></div>
-        <div id="detuneSlider" class="slider"></div>
-        <div id="grainSizeSlider" class="slider"></div>
-        <div id="overlapSlider" class="slider"></div>
-        <div id="rateSlider" class="slider"></div>
-        <!-- <div class="reverseBox">
-            <label for="checkbox-1">Reverse</label>
-            <input type="checkbox" name="checkbox-1" id="checkbox-1">
-        </div> -->
-        <div id="dropZone">
-            <p style="background-color: white; padding: 15px">Drop File Here</p>
+
+        <div class="mb-5" id="sliderGroup1">
+          <div class="row mb-3">
+            <div class="col-2 d-flex justify-content-between">
+              <label for="rangeAmount">LOOP: </label>
+              <input type="text" class="sliderValBox" id="rangeAmount" readonly>
+              <input type="text" class="sliderValBox" id="rangeAmount2" readonly>
+            </div>
+            <div class="col-9">
+              <div id="rangeSlider" class="slider"></div>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-2 d-flex justify-content-between">
+              <label for="detuneAmount">DETUNE:</label>
+              <input type="text" class="sliderValBox" id="detuneAmount" readonly>
+            </div>
+            <div class="col-9">
+              <div id="detuneSlider" class="slider"></div>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-2 d-flex justify-content-between">
+              <label for="rateAmount">RATE:</label>
+              <input type="text" class="sliderValBox" id="rateAmount" readonly>
+            </div>
+            <div class="col-9">
+              <div id="rateSlider" class="slider"></div>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-2 d-flex justify-content-between">
+              <label for="grainAmount">GRAIN:</label>
+              <input type="text" class="sliderValBox" id="grainAmount" readonly>
+            </div>
+            <div class="col-9">
+              <div id="grainSizeSlider" class="slider"></div>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-2 d-flex justify-content-between">
+              <label for="overlapAmount">OVERLAP:</label>
+              <input type="text" class="sliderValBox" id="overlapAmount" readonly>
+            </div>
+            <div class="col-9">
+              <div id="overlapSlider" class="slider"></div>
+            </div>
+          </div>
+
         </div>
-    </section>
+
+        <div class="row" id="dropZone">
+          <div class="col-9 offset-2">
+            <p class="ui-corner-all text-center" style="background-color: white; padding: 15px">Drop File Here</p>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
 </body>
 
 </html>

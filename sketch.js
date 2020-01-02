@@ -5,40 +5,26 @@
 
 
 let player;
-let scl = 100;
-let scl2 = 50;
-let scl4 = 25;
-let isTriggered = false;
 let samp;
 let reverb, delay, chorus, compressor, filter;
 let dropzone;
 let sound;
-let detuneSliderVal = 0;
-let grainSizeSliderVal = 0.5;
-let overlapSliderVal = 0.1;
-let rateSliderVal = 1;
-let startSliderVal = 0;
-let endSliderVal = 1;
 let sampDuration;
-
 
 function preload() {
     samp = loadSound('loops/loop0.wav');
 }
 
 function setup() {
-    noCanvas();
     dropzone = select('#dropZone');
     initFX();
-    frameRate(30);
     dropzone.drop(gotFile);
     sampDuration = samp.buffer.duration;
-    endSliderVal = sampDuration;
     player = new Player();
     player.loadSamp(samp.url);
     player.player.chain(delay, filter);
-    player.settings();
 
+    $("#tabs").tabs();
     $('#rangeSlider').slider({
         range: true,
         min: 0,
@@ -46,71 +32,56 @@ function setup() {
         step: 0.01,
         values: [0, sampDuration],
         slide: function() {
-            startSliderVal = ($(this).slider('values', 0));
-            endSliderVal = ($(this).slider('values', 1));
-            player.settings();
+            player.player.loopStart = ($(this).slider('values', 0));
+            player.player.loopEnd = ($(this).slider('values', 1));
+            // console.log($(this).slider('values', 1))
+            $("#rangeAmount").val($(this).slider('values', 0));
+            $("#rangeAmount2").val($(this).slider('values', 1));
         }
     });
-}
-
-// JQUERY STuFfs
-$(function() {
-
-    let $detuneSlider = $("#detuneSlider").slider({
-        max: 1200,
-        min: -1200
+    $("#detuneSlider").slider({
+        max: 1300,
+        min: -1300,
+        step: 100,
+        value: 0,
+        slide: function() {
+            player.player.detune = ($(this).slider('value'));
+            $("#detuneAmount").val($(this).slider("value"));
+        }
     });
-    let $grainSizeSlider = $('#grainSizeSlider').slider({
-        max: 2,
-        min: 0.01,
-        step: 0.01,
-        value: 0.5
-    });
-    let $overlapSlider = $('#overlapSlider').slider({
-        max: 2,
-        min: 0.01,
-        step: 0.01,
-        value: 0.1
-    });
-    let $rateSlider = $('#rateSlider').slider({
+    $('#rateSlider').slider({
         max: 2,
         min: 0.000001,
         step: 0.125,
-        value: 1
+        value: 1,
+        slide: function() {
+            player.player.playbackRate = ($(this).slider('value'));
+            $("#rateAmount").val($(this).slider("value"));
+        }
     });
-    let $startSlider = $('#startSlider').slider({
-        max: 1,
-        min: 0,
+    $('#grainSizeSlider').slider({
+        max: 2,
+        min: 0.01,
         step: 0.01,
-        value: 0
+        value: 0.5,
+        slide: function() {
+            player.player.grainSize = ($(this).slider('value'));
+            $("#grainAmount").val($(this).slider("value"));
+        }
     });
-    let $endSlider = $('#endSlider').slider({
-        max: 4,
-        min: 0,
+    $('#overlapSlider').slider({
+        max: 2,
+        min: 0.01,
         step: 0.01,
-        value: 4
+        value: 0.1,
+        slide: function() {
+            player.player.overlap = ($(this).slider('value'));
+            $("#overlapAmount").val($(this).slider("value"));
+        }
     });
-    $($detuneSlider).on('slide', function() {
-        detuneSliderVal = ($($detuneSlider).slider('value'));
-        player.settings();
-    });
-    $($grainSizeSlider).on('slide', function() {
-        grainSizeSliderVal = ($($grainSizeSlider).slider('value'));
-        player.settings();
-    });
-    $($overlapSlider).on('slide', function() {
-        overlapSliderVal = ($($overlapSlider).slider('value'));
-        player.settings();
-    });
-    $($rateSlider).on('slide', function() {
-        rateSliderVal = ($($rateSlider).slider('value'));
-        player.settings();
-    });
-
     $('#checkbox-1').checkboxradio({
         icon: false
     });
-
     $('#checkbox-1').on('click', function() {
         if ($(this).is(":checked")) {
             player.player.reverse = true;
@@ -118,37 +89,19 @@ $(function() {
             player.player.reverse = false;
         }
     });
-
     $('#startButton').on('click', function() {
         player.start();
     });
     $('#stopButton').on('click', function() {
         player.stop();
     });
-});
 
-function draw() {
-    background(200);
 }
-
-// function mousePressed() {
-//     player.start();
-// }
 
 class Player {
     constructor() {
         this.player = new Tone.GrainPlayer();
-    }
-
-    settings() {
-        this.player.playbackRate = rateSliderVal;
-        this.player.detune = detuneSliderVal;
-        this.player.grainSize = grainSizeSliderVal;
-        this.player.overlap = overlapSliderVal;
         this.player.loop = true;
-        this.player.loopStart = startSliderVal;
-        this.player.loopEnd = endSliderVal;
-        // this.player.reverse = false;
     }
 
     start() {
@@ -179,7 +132,6 @@ function initFX() {
     delay = new Tone.PingPongDelay().connect(compressor);
     chorus = new Tone.Chorus().connect(compressor);
     filter = new Tone.Filter(1000, 'lowpass').connect(compressor);
-
     delay.wet.value = 1;
     delay.delayTime.value = "16n";
     delay.feedback.value = 0.5;
@@ -192,9 +144,7 @@ function initFX() {
 }
 
 function gotFile(file) {
-    // console.log('got file');
     sound = loadSound(file.data, loadIt);
-    // console.log(sound);
 }
 
 function loadIt() {
