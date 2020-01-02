@@ -1,22 +1,17 @@
-
-
-
-
-#tabs-1{
-  margin-top: 5px;
-  padding-top: 50px;
-  background-color: gray;
+#tabs-1 {
+    margin-top: 5px;
+    padding-top: 50px;
+    background-color: gray;
 }
 
 label {
-  font-size: 10px;
-  /* font-family: 'SFAlien'; */
+    font-size: 10px;
+    /* font-family: 'SFAlien'; */
 }
 
-
 .row {
-  display: flex;
-  align-items: center;
+    display: flex;
+    align-items: center;
 }
 
 .slider {
@@ -25,8 +20,7 @@ label {
     margin-right: auto;
 }
 
-.button {
-}
+.button {}
 
 .ui-slider-handle {
     /* background-color: black !important; */
@@ -40,21 +34,32 @@ label {
     text-align: center;
     line-height: 1.6em;
     border: 1px solid gray;
-  }
+}
 
-.sliderValBox{
-  border: 0;
-  background: transparent;
-  font-size: 10px !important;
-  width: 100%;
-  margin-bottom: .5rem;
-  }
+.sliderValBox {
+    border: 0;
+    background: transparent;
+    font-size: 10px !important;
+    /* width: 100%; */
+    margin-bottom: .5rem;
+}
 
 .reverseBox {
     display: flex;
     justify-content: center;
 }
 
+#tabs-2 {
+    margin-top: 5px;
+    padding-top: 50px;
+    background-color: #728485;
+}
+
+#tabs-3 {
+    margin-top: 5px;
+    padding-top: 50px;
+    background-color: hsl(62, 13%, 54%);
+}
 
 #defaultCanvas0 {
     width: 0px;
