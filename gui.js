@@ -1,237 +1,228 @@
-let audio, actx, dest, recorder, chunks;
-let player;
-let samp;
-let reverb, delay, chorus, compressor, filter;
-let lfo1;
-let dropzone;
-let sound;
-let sampDuration;
-
-function preload() {
-  samp = loadSound('loops/loop0.wav');
-}
-
-function setup() {
-  audio = document.querySelector('audio');
-  $(audio).hide();
-  actx = Tone.context;
-  dest = actx.createMediaStreamDestination();
-  recorder = new MediaRecorder(dest.stream);
-  chunks = [];
-  recorder.ondataavailable = evt => chunks.push(evt.data);
-  recorder.onstart = evt => {
-    chunks = [];
-  }
-  recorder.onstop = evt => {
-    let blob = new Blob(chunks, {
-      type: 'audio/ogg; codes=opus'
-    });
-    audio.src = URL.createObjectURL(blob);
-  };
-  dropzone = select('#dropZone');
-  initFX();
-  initLFO();
-  dropzone.drop(gotFile);
-  sampDuration = samp.buffer.duration;
-  player = new Player();
-  player.loadSamp(samp.url);
-  player.player.chain(filter, delay, reverb);
-
-
-  $("#tabs").tabs();
-  $("#accordian").accordion();
-
-  // PLAYER BUTTONS
-  $('#startButton').checkboxradio({
+function guiControls () {
+  let bufferDuration = player.buffer.duration;
+  // Start Button
+  const $startButton = $('#startButton');
+  $startButton.checkboxradio({
     icon: false
   });
-  $('#startButton').on('click', function() {
+  $startButton.on('click', function() {
     if ($(this).is(':checked')) {
       player.start();
     } else {
       player.stop();
     }
-  })
-  $('#reverseButton').checkboxradio({
+  });
+  // reverse Button
+  const $reverseButton = $('#reverseButton');
+  $reverseButton.checkboxradio({
     icon: false
   });
-  $('#reverseButton').on('click', function() {
+  $reverseButton.on('click', function() {
     if ($(this).is(":checked")) {
-      player.player.reverse = true;
+      player.reverse = true;
     } else {
-      player.player.reverse = false;
+      player.reverse = false;
     }
   });
-  $('#recordButton').checkboxradio({
+  // record Button
+  const $recordButton = $('#recordButton');
+  $recordButton.checkboxradio({
     icon: false
   });
-  $('#recordButton').on('click', function() {
+  $recordButton.on('click', function() {
     if ($(this).is(":checked")) {
-      chunks = [];
+      // chunks = [];
       recorder.start();
     } else {
       recorder.stop();
-      $(audio).show();
-    }
-  })
-
-  // PLAYER SLIDERS
-  // Range Slider
-  $('#rangeSlider').slider({
-    range: true,
-    min: 0,
-    max: sampDuration,
-    step: 0.01,
-    values: [0, sampDuration-0.2],
-    slide: function() {
-      player.player.loopStart = ($(this).slider('values', 0));
-      player.player.loopEnd = ($(this).slider('values', 1));
-      $('#rangeHandle1').text($(this).slider("values", 0));
-      $('#rangeHandle2').text($(this).slider("values", 1));
     }
   });
-  // Detune Slider
-  $("#detuneSlider").slider({
+  // range Slider
+  const $rangeSlider = $('#rangeSlider');
+  const $rangeHandle1 = $('#rangeHandle1');
+  const $rangeHandle2 = $('#rangeHandle2');
+  $rangeSlider.slider({
+    range: true,
+    min: 0,
+    max: bufferDuration,
+    step: 0.01,
+    values: [0, bufferDuration],
+    slide: function() {
+      player.loopStart = ($(this).slider('values', 0));
+      player.loopEnd = ($(this).slider('values', 1));
+      $rangeHandle1.text($(this).slider("values", 0));
+      $rangeHandle2.text($(this).slider("values", 1));
+    }
+  });
+  // detune Slider
+  const $detuneSlider = $('#detuneSlider');
+  const $detuneHandle = $('#detuneHandle');
+  $detuneSlider.slider({
     max: 1300,
     min: -1300,
     step: 100,
     value: 0,
     slide: function() {
-      player.player.detune = ($(this).slider('value'));
-      $('#detuneHandle').text($(this).slider('value'));
+      player.detune = ($(this).slider('value'));
+      $detuneHandle.text(($(this).slider('value'))/100);
     }
   });
   // Rate Slider
-  $('#rateSlider').slider({
+  const $rateSlider = $('#rateSlider');
+  const $rateHandle = $('#rateHandle');
+  $rateSlider.slider({
     max: 2,
-    min: 0.000001,
+    min: 0.125,
     step: 0.125,
     value: 1,
     slide: function() {
-      player.player.playbackRate = ($(this).slider('value'));
-      $('#rateHandle').text($(this).slider('value'));
+      player.playbackRate = ($(this).slider('value'));
+      $rateHandle.text($(this).slider('value'));
     }
   });
   // Grain Slider
-  $('#grainSizeSlider').slider({
+  const $grainSlider = $('#grainSizeSlider');
+  const $grainHandle = $('#grainHandle');
+  $grainSlider.slider({
     max: 2,
     min: 0.01,
     step: 0.01,
     value: 0.5,
     slide: function() {
-      player.player.grainSize = ($(this).slider('value'));
-      $('#grainHandle').text($(this).slider('value'));
+      player.grainSize = ($(this).slider('value'));
+      $grainHandle.text($(this).slider('value'));
     }
   });
   // Overlap Slider
-  $('#overlapSlider').slider({
+  const $overlapSlider = $('#overlapSlider');
+  const $overlapHandle = $('#overlapHandle');
+  $overlapSlider.slider({
     max: 2,
     min: 0.01,
     step: 0.01,
     value: 0.1,
     slide: function() {
-      player.player.overlap = ($(this).slider('value'));
-      $('#overlapHandle').text($(this).slider('value'));
+      player.overlap = ($(this).slider('value'));
+      $overlapHandle.text($(this).slider('value'));
     }
   });
-  // FX SLIDERS
-  // FILTER sliders
-  $(".filterTypeRadios").checkboxradio({
+  // FILTER Selector
+  const $filterTypeButtons = $('.filterTypeRadios');
+  $filterTypeButtons.checkboxradio({
     icon: false
   });
-  $('.filterTypeRadios').on('click', function() {
+  $filterTypeButtons.on('click', function() {
     if ($(this).is(":checked")) {
       filter.type = ($(this).attr('id'));
     }
   });
-
-  $('#filterFreqSlider').slider({
+  // Filter Frequency
+  const $filterFreqSlider = $('#filterFreqSlider');
+  const $filterFreqHandle = $('#filterFreqHandle');
+  $filterFreqSlider.slider({
     max: 6000,
     min: 0,
     step: 0.01,
     value: 5000,
     slide: function() {
       filter.frequency.value = ($(this).slider('value'));
-      $('#filterFreqAmount').val($(this).slider('value'));
+      let filterFreq = Math.floor($(this).slider('value'));
+      $filterFreqHandle.text(filterFreq);
     }
   });
-  $('#filterQSlider').slider({
+  // Filter Resonance
+  const $filterQSlider = $('#filterQSlider');
+  const $filterQHandle = $('#filterQHandle');
+  $filterQSlider.slider({
     max: 20,
     min: 0,
     step: 0.01,
     value: 1,
     slide: function() {
-      console.log(filter.Q.value);
       filter.Q.value = ($(this).slider('value'));
-      $('#filterQAmount').val($(this).slider('value'));
+      $filterQHandle.text($(this).slider('value'));
     }
   });
-  // DELAY Sliders
-  $('#delayWetSlider').slider({
+  // Delay Mix
+  const $delayMixSlider = $('#delayWetSlider');
+  const $delayMixHandle = $("#delayWetHandle");
+  $delayMixSlider.slider({
     max: 1,
     min: 0,
     step: 0.01,
     value: 0,
     slide: function() {
       delay.wet.value = ($(this).slider('value'));
-      $('#delayWetAmount').val($(this).slider('value'));
+      $delayMixHandle.text($(this).slider('value'));
     }
   });
-  $('#delayTimeSlider').slider({
+  // Delay Time
+  const $delayTimeSlider = $('#delayTimeSlider');
+  const $delayTimeHandle = $('#delayTimeHandle');
+  $delayTimeSlider.slider({
     max: 1,
     min: 0,
     step: 0.01,
     value: 0,
     slide: function() {
       delay.delayTime.value = ($(this).slider('value'));
-      $('#delayTimeAmount').val($(this).slider('value'));
+      $delayTimeHandle.text($(this).slider('value'));
     }
   });
-  $('#delayFeedbackSlider').slider({
+  // Delay Feedback
+  const $delayFeedbackSlider = $('#delayFeedbackSlider');
+  const $delayFeedbackHandle = $('#delayFeedbackHandle');
+  $delayFeedbackSlider.slider({
     max: 1,
     min: 0,
     step: 0.01,
     value: 0,
     slide: function() {
       delay.feedback.value = ($(this).slider('value'));
-      $('#delayFeedbackAmount').val($(this).slider('value'));
+      $delayFeedbackHandle.text($(this).slider('value'));
     }
   });
-
-  //REVERB sliders
-  $('#reverbWetSlider').slider({
+  //Reverb Mix
+  const $reverbMixSlider = $('#reverbWetSlider');
+  const $reverbMixHandle = $('#reverbWetHandle');
+  $reverbMixSlider.slider({
     max: 1,
     min: 0,
     step: 0.01,
     value: 0,
     slide: function() {
       reverb.wet.value = ($(this).slider('value'));
-      $('#reverbWetAmount').val($(this).slider('value'));
+      $reverbMixHandle.text($(this).slider('value'));
     }
   });
-  $('#reverbTimeSlider').slider({
+  // Reverb Time
+  const $reverbTimeSlider = $('#reverbTimeSlider');
+  const $reverbTimeHandle = $('#reverbTimeHandle');
+  $reverbTimeSlider.slider({
     max: 1,
     min: 0,
     step: 0.01,
     value: 0,
     slide: function() {
       reverb.roomSize.value = ($(this).slider('value'));
-      $('#reverbTimeAmount').val($(this).slider('value'));
+      $reverbTimeHandle.text($(this).slider('value'));
     }
   });
-  $('#reverbDampSlider').slider({
+  // Reverb Dampening
+  const $reverbDampSlider = $('#reverbDampSlider');
+  const $reverbDampHandle = $('#reverbDampHandle');
+  $reverbDampSlider.slider({
     max: 6000,
     min: 0,
     step: 0.01,
     value: 0,
     slide: function() {
       reverb.dampening.value = ($(this).slider('value'));
-      $('#reverbDampAmount').val($(this).slider('value'));
+      $reverbDampHandle.text($(this).slider('value'));
     }
   });
 
   // LFO SECTION
-
   // LFO One
   $('#lfo1-onOff').checkboxradio({
     icon: false
@@ -262,7 +253,6 @@ function setup() {
     value: 0.5,
     slide: function() {
       lfo1.frequency.value = ($(this).slider('value'));
-      $('#lfo1FreqAmount').val($(this).slider('value'));
     }
   });
   $('#lfo1AmpSlider').slider({
@@ -272,7 +262,6 @@ function setup() {
     value: 1,
     slide: function() {
       lfo1.amplitude.value = ($(this).slider('value'));
-      $('#lfo1AmpAmount').val($(this).slider('value'));
     }
   });
   // LFO Two
@@ -305,7 +294,6 @@ function setup() {
     value: 0.5,
     slide: function() {
       lfo2.frequency.value = ($(this).slider('value'));
-      $('#lfo2FreqAmount').val($(this).slider('value'));
     }
   });
   $('#lfo2AmpSlider').slider({
@@ -315,7 +303,6 @@ function setup() {
     value: 1,
     slide: function() {
       lfo2.amplitude.value = ($(this).slider('value'));
-      $('#lfo2AmpAmount').val($(this).slider('value'));
     }
   });
   // LFO Three
@@ -348,7 +335,6 @@ function setup() {
     value: 0.5,
     slide: function() {
       lfo3.frequency.value = ($(this).slider('value'));
-      $('#lfo3FreqAmount').val($(this).slider('value'));
     }
   });
   $('#lfo3AmpSlider').slider({
@@ -358,7 +344,6 @@ function setup() {
     value: 1,
     slide: function() {
       lfo3.amplitude.value = ($(this).slider('value'));
-      $('#lfo3AmpAmount').val($(this).slider('value'));
     }
   });
   // LFO Four
@@ -390,7 +375,6 @@ function setup() {
     value: 0.5,
     slide: function() {
       lfo4.frequency.value = ($(this).slider('value'));
-      $('#lfo4FreqAmount').val($(this).slider('value'));
     }
   });
   $('#lfo4AmpSlider').slider({
@@ -400,7 +384,6 @@ function setup() {
     value: 1,
     slide: function() {
       lfo4.amplitude.value = ($(this).slider('value'));
-      $('#lfo4AmpAmount').val($(this).slider('value'));
     }
   });
   // LFO Five
@@ -432,7 +415,6 @@ function setup() {
     value: 0.5,
     slide: function() {
       lfo5.frequency.value = ($(this).slider('value'));
-      $('#lfo5FreqAmount').val($(this).slider('value'));
     }
   });
   $('#lfo5AmpSlider').slider({
@@ -442,7 +424,6 @@ function setup() {
     value: 1,
     slide: function() {
       lfo5.amplitude.value = ($(this).slider('value'));
-      $('#lfo5AmpAmount').val($(this).slider('value'));
     }
   });
   // LFO Six
@@ -474,7 +455,6 @@ function setup() {
     value: 0.5,
     slide: function() {
       lfo6.frequency.value = ($(this).slider('value'));
-      $('#lfo6FreqAmount').val($(this).slider('value'));
     }
   });
   $('#lfo6AmpSlider').slider({
@@ -484,7 +464,6 @@ function setup() {
     value: 1,
     slide: function() {
       lfo6.amplitude.value = ($(this).slider('value'));
-      $('#lfo6AmpAmount').val($(this).slider('value'));
     }
   });
   // LFO Seven
@@ -516,7 +495,6 @@ function setup() {
     value: 0.5,
     slide: function() {
       lfo7.frequency.value = ($(this).slider('value'));
-      $('#lfo7FreqAmount').val($(this).slider('value'));
     }
   });
   $('#lfo7AmpSlider').slider({
@@ -526,10 +504,8 @@ function setup() {
     value: 1,
     slide: function() {
       lfo7.amplitude.value = ($(this).slider('value'));
-      $('#lfo7AmpAmount').val($(this).slider('value'));
     }
   });
-
   // LFO Eight
   $('#lfo8-onOff').checkboxradio({
     icon: false
@@ -559,7 +535,6 @@ function setup() {
     value: 0.5,
     slide: function() {
       lfo8.frequency.value = ($(this).slider('value'));
-      $('#lfo8FreqAmount').val($(this).slider('value'));
     }
   });
   $('#lfo8AmpSlider').slider({
@@ -569,75 +544,6 @@ function setup() {
     value: 1,
     slide: function() {
       lfo8.amplitude.value = ($(this).slider('value'));
-      $('#lfo8AmpAmount').val($(this).slider('value'));
     }
   });
-}
-
-class Player {
-  constructor() {
-    this.player = new Tone.GrainPlayer();
-    this.player.loop = true;
-  }
-
-  start() {
-    this.player.start();
-  }
-
-  stop() {
-    this.player.stop();
-  }
-
-  loadSamp(s) {
-    this.player.buffer.load(s);
-  }
-
-}
-
-
-function initFX() {
-  compressor = new Tone.Compressor({
-    ratio: 12,
-    threshold: -24,
-    release: 0.25,
-    attack: 0.003,
-    knee: 30
-  });
-  compressor.connect(dest);
-  compressor.connect(Tone.Master);
-  reverb = new Tone.Freeverb().connect(compressor);
-  delay = new Tone.PingPongDelay().connect(compressor);
-  filter = new Tone.Filter().connect(compressor);
-  filter.frequency.value = 6000;
-  filter.type = "lowpass";
-  filter.q = 1;
-  delay.wet.value = 0;
-  delay.delayTime.value = 0.125;
-  delay.feedback.value = 0.125;
-  reverb.wet.value = 0;
-  reverb.roomSize.value = 0.5;
-  reverb.dampening.value = 3000;
-}
-
-function initLFO() {
-  lfo1 = new Tone.LFO(0.2, 0, 4000);
-  lfo2 = new Tone.LFO(0.2, 0, 20);
-  lfo3 = new Tone.LFO(0.2, 0, 1);
-  lfo4 = new Tone.LFO(0.2, 0, 1);
-  lfo5 = new Tone.LFO(0.2, 0, 1);
-  lfo6 = new Tone.LFO(0.2, 0, 1);
-  lfo7 = new Tone.LFO(0.2, 0, 1);
-  lfo8 = new Tone.LFO(0.2, 0, 4000);
-}
-
-function gotFile(file) {
-  sound = loadSound(file.data, loadIt);
-}
-
-function loadIt() {
-  player.loadSamp(sound.url);
-  sampDuration = sound.buffer.duration;
-  player.loopEnd = sampDuration;
-  endSliderVal = sampDuration;
-  $('#rangeSlider').slider("option", "max", sampDuration);
 }

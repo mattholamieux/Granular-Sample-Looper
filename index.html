@@ -8,7 +8,7 @@
   <link href="style.css" type="text/css" rel="stylesheet">
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" type="text/css" rel="stylesheet">
   <link href="libraries/jquery-ui.min.css" type="text/css" rel="stylesheet">
-  <title>GrainPlayer</title>
+  <title>Granular Player</title>
   <script src="libraries/jquery-3.4.1.min.js"></script>
   <script src="libraries/jquery-ui.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
@@ -16,12 +16,21 @@
   <script src="libraries/p5.js"></script>
   <script src="libraries/p5.dom.js"></script>
   <script src="libraries/p5.sound.js"></script>
-  <script src="sketch.js"></script>
+  <script src="fx.js"></script>
+  <script src="gui.js"></script>
+  <script src="player.js"></script>
+  <script src="dropzone.js"></script>
+  <script src="recorder.js"></script>
+  <script src="main.js"></script>
 </head>
 
 <body>
+  <audio id="myLoop" preload="auto">
+    <source src="loops/loop0.wav" type="audio/wav">
+  </audio>
 
   <div class="container-fluid">
+
     <div id="tabs">
       <!-- Tabs Menu -->
       <ul>
@@ -66,7 +75,7 @@
           <div class="row mb-4">
             <div class="col-8 offset-2">
               <div class="mb-3 w-25 d-flex align-items-center">
-                <h6 class="my-2 text-center border-bottom">DETUNE</h6>
+                <h6 class="my-2 text-center border-bottom">PITCH</h6>
               </div>
               <div id="detuneSlider" class="slider">
                 <div id="detuneHandle" class="custom-handle ui-slider-handle"></div>
@@ -146,7 +155,9 @@
               </div>
               <button class="mb-3 btn btn-secondary w-10" type="button" data-toggle="collapse" data-target="#lfo1Collapse" aria-expanded="false" aria-controls="lfo1Collapse">LFO</button>
             </div>
-            <div id="filterFreqSlider" class="slider"></div>
+            <div id="filterFreqSlider" class="slider">
+              <div id="filterFreqHandle" class="custom-handle ui-slider-handle"></div>
+            </div>
           </div>
         </div>
         <!-- LFO ONE -->
@@ -201,8 +212,9 @@
               </div>
               <button class="btn btn-secondary mb-3 w-10" type="button" data-toggle="collapse" data-target="#lfo2Collapse" aria-expanded="false" aria-controls="lfo2Collapse">LFO</button>
             </div>
-
-            <div id="filterQSlider" class="slider"></div>
+            <div id="filterQSlider" class="slider">
+              <div id="filterQHandle" class="custom-handle ui-slider-handle"></div>
+            </div>
           </div>
         </div>
         <!-- LFO TWO -->
@@ -257,7 +269,9 @@
               </div>
               <button class="mb-3 w-10 btn btn-secondary" type="button" data-toggle="collapse" data-target="#lfo3Collapse" aria-expanded="false" aria-controls="lfo3Collapse">LFO</button>
             </div>
-            <div id="delayWetSlider" class="slider"></div>
+            <div id="delayWetSlider" class="slider">
+              <div id="delayWetHandle" class="custom-handle ui-slider-handle"></div>
+            </div>
           </div>
         </div>
         <!-- LFO THREE -->
@@ -312,7 +326,9 @@
               </div>
               <button class="mb-3 w-10 btn btn-secondary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">LFO</button>
             </div>
-            <div id="delayTimeSlider" class="slider"></div>
+            <div id="delayTimeSlider" class="slider">
+              <div id="delayTimeHandle" class="custom-handle ui-slider-handle"></div>
+            </div>
           </div>
         </div>
         <!-- LFO FOUR -->
@@ -367,7 +383,9 @@
               </div>
               <button class="mb-3 w-10 btn btn-secondary" type="button" data-toggle="collapse" data-target="#lfo5Collapse" aria-expanded="false" aria-controls="lfo5Collapse">LFO</button>
             </div>
-            <div id="delayFeedbackSlider" class="slider"></div>
+            <div id="delayFeedbackSlider" class="slider">
+              <div id="delayFeedbackHandle" class="custom-handle ui-slider-handle"></div>
+            </div>
           </div>
         </div>
         <!-- LFO FIVE -->
@@ -423,7 +441,9 @@
               </div>
               <button class="mb-3 w-10 btn btn-secondary" type="button" data-toggle="collapse" data-target="#lfo6Collapse" aria-expanded="false" aria-controls="lfo6Collapse">LFO</button>
             </div>
-            <div id="reverbWetSlider" class="slider"></div>
+            <div id="reverbWetSlider" class="slider">
+              <div id="reverbWetHandle" class="custom-handle ui-slider-handle"></div>
+            </div>
           </div>
         </div>
         <!-- LFO SIX -->
@@ -478,7 +498,9 @@
               </div>
               <button class="mb-3 w-10 btn btn-secondary" type="button" data-toggle="collapse" data-target="#lfo7Collapse" aria-expanded="false" aria-controls="lfo7Collapse">LFO</button>
             </div>
-            <div id="reverbTimeSlider" class="slider"></div>
+            <div id="reverbTimeSlider" class="slider">
+              <div id="reverbTimeHandle" class="custom-handle ui-slider-handle"></div>
+            </div>
           </div>
         </div>
         <!-- LFO SEVEN -->
@@ -533,7 +555,9 @@
               </div>
               <button class="mb-3 w-10 btn btn-secondary" type="button" data-toggle="collapse" data-target="#lfo8Collapse" aria-expanded="false" aria-controls="lfo8Collapse">LFO</button>
             </div>
-            <div id="reverbDampSlider" class="slider"></div>
+            <div id="reverbDampSlider" class="slider">
+              <div id="reverbDampHandle" class="custom-handle ui-slider-handle"></div>
+            </div>
           </div>
         </div>
         <!-- LFO EIGHT -->
@@ -581,8 +605,9 @@
         </div>
       </section>
     </div>
+
   </div>
-  <audio controls></audio>
+  <audio id="myAudio" controls></audio>
 </body>
 
 </html>
