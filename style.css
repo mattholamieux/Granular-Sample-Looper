@@ -1,6 +1,15 @@
+audio {
+  display: block;
+  margin: 1rem auto;
+}
+
+.w-10 {
+  width: 10%;
+}
+
 #tabs-1 {
     margin-top: 5px;
-    padding-top: 50px;
+    padding-top: 40px;
     background-color: gray;
 }
 
@@ -26,14 +35,14 @@ label {
     /* background-color: black !important; */
 }
 
-#custom-handle {
-    width: 3em;
-    height: 1.6em;
-    top: 50%;
-    margin-top: -.8em;
-    text-align: center;
-    line-height: 1.6em;
-    border: 1px solid gray;
+.custom-handle {
+    width: 3em !important;
+    height: 1.6em !important;
+    top: 50% !important;
+    margin-top: -.8em !important;
+    text-align: center !important;
+    line-height: 1.6em !important;
+    border: 1px solid gray !important;
 }
 
 .sliderValBox {
@@ -44,22 +53,17 @@ label {
     margin-bottom: .5rem;
 }
 
-.reverseBox {
-    display: flex;
-    justify-content: center;
+.flex-end {
+  display: flex;
+  align-items: flex-end;
 }
 
 #tabs-2 {
     margin-top: 5px;
-    padding-top: 50px;
+    padding-top: 20px;
     background-color: #728485;
 }
 
-#tabs-3 {
-    margin-top: 5px;
-    padding-top: 50px;
-    background-color: hsl(62, 13%, 54%);
-}
 
 #defaultCanvas0 {
     width: 0px;

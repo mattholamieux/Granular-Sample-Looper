@@ -2,600 +2,587 @@
 <html>
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="style.css" type="text/css" rel="stylesheet">
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" type="text/css" rel="stylesheet">
-    <link href="libraries/jquery-ui.min.css" type="text/css" rel="stylesheet">
-    <title>GrainPlayer</title>
-    <script src="libraries/jquery-3.4.1.min.js"></script>
-    <script src="libraries/jquery-ui.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-    <script src="sketch.js"></script>
-    <script src="libraries/p5.js"></script>
-    <script src="libraries/p5.dom.js"></script>
-    <script src="libraries/p5.sound.js"></script>
-    <script src="libraries/Tone.js"></script>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="style.css" type="text/css" rel="stylesheet">
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" type="text/css" rel="stylesheet">
+  <link href="libraries/jquery-ui.min.css" type="text/css" rel="stylesheet">
+  <title>GrainPlayer</title>
+  <script src="libraries/jquery-3.4.1.min.js"></script>
+  <script src="libraries/jquery-ui.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+  <script src="libraries/Tone.js"></script>
+  <script src="libraries/p5.js"></script>
+  <script src="libraries/p5.dom.js"></script>
+  <script src="libraries/p5.sound.js"></script>
+  <script src="sketch.js"></script>
 </head>
 
 <body>
-    <div class="container-fluid">
-        <div id="tabs">
-            <ul>
-                <li><a href="#tabs-1">Player</a></li>
-                <li><a href="#tabs-2">Effects</a></li>
-            </ul>
 
-            <!-- Player Section -->
-            <section class="firstSection ui-corner-all" id="tabs-1">
+  <div class="container-fluid">
+    <div id="tabs">
+      <!-- Tabs Menu -->
+      <ul>
+        <li><a href="#tabs-1">Player</a></li>
+        <li><a href="#tabs-2">Effects</a></li>
+      </ul>
 
-                <div class="row mb-5" id="sampleButtonGroup">
-                    <div class="col-9 offset-2 d-flex justify-content-around">
-                        <div id="startButton" class="button ui-button ui-corner-all">Start</div>
-                        <div class="reverseBox">
-                            <label for="checkbox-1" class="mb-0">Reverse</label>
-                            <input type="checkbox" name="checkbox-1" id="checkbox-1">
-                        </div>
-                        <div id="stopButton" class="button ui-button ui-corner-all">Stop</div>
-                    </div>
-                </div>
-
-                <div class="mb-5" id="sampleSliderGroup">
-                    <div class="row mb-3">
-                        <div class="col-2">
-                            <label for="rangeAmount" class="text-center w-100">LOOP:</label>
-                            <div class="d-flex">
-                                <input type="text" class="sliderValBox text-right w-50 mr-1" id="rangeAmount" readonly>
-
-                                <input type="text" class="sliderValBox text-left w-50 ml-1" id="rangeAmount2" readonly>
-                            </div>
-                        </div>
-                        <div class="col-9">
-                            <div id="rangeSlider" class="slider"></div>
-                        </div>
-                    </div>
-
-                    <div class="row mb-3">
-                        <div class="col-2">
-                            <label for="detuneAmount" class="text-center w-100">DETUNE:</label>
-                            <input type="text" class="sliderValBox text-center w-100" id="detuneAmount" readonly>
-                        </div>
-                        <div class="col-9">
-                            <div id="detuneSlider" class="slider"></div>
-                        </div>
-
-                    </div>
-
-
-                    <div class="row mb-3">
-                        <div class="col-2">
-                            <label for="rateAmount" class="text-center w-100">RATE:</label>
-                            <input type="text" class="sliderValBox text-center w-100" id="rateAmount" readonly>
-                        </div>
-                        <div class="col-9">
-                            <div id="rateSlider" class="slider"></div>
-                        </div>
-                    </div>
-
-                    <div class="row mb-3">
-                        <div class="col-2">
-                            <label for="grainAmount" class="text-center w-100">GRAIN:</label>
-                            <input type="text" class="sliderValBox text-center w-100" id="grainAmount" readonly>
-                        </div>
-                        <div class="col-9">
-                            <div id="grainSizeSlider" class="slider"></div>
-                        </div>
-                    </div>
-
-                    <div class="row mb-3">
-                        <div class="col-2">
-                            <label for="overlapAmount" class="text-center w-100">OVERLAP:</label>
-                            <input type="text" class="sliderValBox text-center w-100" id="overlapAmount" readonly>
-                        </div>
-                        <div class="col-9">
-                            <div id="overlapSlider" class="slider"></div>
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="row" id="dropZone">
-                    <div class="col-9 offset-2">
-                        <p class="ui-corner-all text-center" style="background-color: white; padding: 15px">Drop File Here</p>
-                    </div>
-                </div>
-            </section>
-
-            <!-- FX SECTION -->
-            <section class="secondSection ui-corner-all" id="tabs-2">
-
-                <!-- FILTER SELECTOR -->
-                <div class="row mb-3">
-                    <div class="col-2">
-                        <label for="filterType" class="text-center w-100">FILTER TYPE:</label>
-                    </div>
-                    <div class="col-9 widget d-flex justify-content-around">
-                        <label for="lowpass">lowpass</label>
-                        <input type="radio" name="radio-1" class="filterTypeRadios" id="lowpass">
-                        <label for="highpass">highpass</label>
-                        <input type="radio" name="radio-1" class="filterTypeRadios" id="highpass">
-                        <label for="bandpass">bandpass</label>
-                        <input type="radio" name="radio-1" class="filterTypeRadios" id="bandpass">
-                    </div>
-                </div>
-                <!-- FILTER FREQUENCY -->
-                <div class="row mb-3">
-                    <div class="col-2">
-                        <label for="filterFreqAmount" class="text-center w-100">FILTER FREQUENCY:</label>
-                        <input type="text" class="sliderValBox text-center w-100" id="filterFreqAmount" readonly>
-                    </div>
-                    <div class="col-9">
-                        <div id="filterFreqSlider" class="slider"></div>
-                    </div>
-                    <div class="col-1">
-                        <button class="btn btn-secondary" type="button" data-toggle="collapse" data-target="#lfo1Collapse" aria-expanded="false" aria-controls="lfo1Collapse">
-                          LFO
-                        </button>
-                    </div>
-                </div>
-
-                <!-- LFO ONE -->
-                <div class="row mb-3">
-                    <div class="collapse col-9 offset-2" id="lfo1Collapse">
-                        <div class="card card-body">
-                            <div class="row mb-3">
-                                <div class="col-2">
-                                    <div class="reverseBox mx-auto">
-                                        <label for="lfo1-onOff" class="mb-0">On/Off</label>
-                                        <input type="checkbox" name="checkbox-1" id="lfo1-onOff">
-                                    </div>
-                                </div>
-                                <div class="col-9 widget d-flex justify-content-around">
-                                    <label for="sineButton1">sine</label>
-                                    <input type="radio" name="radio-LFO1" class="lfo1ShapeRadios sine" id="sineButton1">
-                                    <label for="triangleButton1">triangle</label>
-                                    <input type="radio" name="radio-LFO1" class="lfo1ShapeRadios triangle" id="triangleButton1">
-                                    <label for="squareButton1">square</label>
-                                    <input type="radio" name="radio-LFO1" class="lfo1ShapeRadios square" id="squareButton1">
-                                    <label for="sawtoothButton1">sawtooth</label>
-                                    <input type="radio" name="radio-LFO1" class="lfo1ShapeRadios sawtooth" id="sawtoothButton1">
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-2">
-                                    <label for="lfo1FreqAmount" class="text-center w-100">FREQUENCY</label>
-                                    <input type="text" class="sliderValBox text-center w-100" id="lfo1FreqAmount" readonly>
-                                </div>
-                                <div class="col-9">
-                                    <div id="lfo1FreqSlider" class="slider"></div>
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-2">
-                                    <label for="lfo1AmpAmount" class="text-center w-100">AMPLITUDE</label>
-                                    <input type="text" class="sliderValBox text-center w-100" id="lfo1AmpAmount" readonly>
-                                </div>
-                                <div class="col-9">
-                                    <div id="lfo1AmpSlider" class="slider"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- FILTER RESONANCE -->
-                <div class="row mb-3">
-                    <div class="col-2">
-                        <label for="filterQAmount" class="text-center w-100">FILTER RESONANCE:</label>
-                        <input type="text" class="sliderValBox text-center w-100" id="filterQAmount" readonly>
-                    </div>
-                    <div class="col-9">
-                        <div id="filterQSlider" class="slider"></div>
-                    </div>
-                    <div class="col-1">
-                        <button class="btn btn-secondary" type="button" data-toggle="collapse" data-target="#lfo2Collapse" aria-expanded="false" aria-controls="lfo2Collapse">
-                          LFO
-                        </button>
-                    </div>
-                </div>
-                <!-- LFO TWO -->
-                <div class="row mb-3">
-                    <div class="collapse col-9 offset-2" id="lfo2Collapse">
-                        <div class="card card-body">
-                            <div class="row mb-3">
-                                <div class="col-2">
-                                    <div class="reverseBox mx-auto">
-                                        <label for="lfo2-onOff" class="mb-0">On/Off</label>
-                                        <input type="checkbox" name="checkbox-2" id="lfo2-onOff">
-                                    </div>
-                                </div>
-                                <div class="col-9 widget d-flex justify-content-around">
-                                    <label for="sineButton2">sine</label>
-                                    <input type="radio" name="radio-LFO2" class="lfo2ShapeRadios sine" id="sineButton2">
-                                    <label for="triangleButton2">triangle</label>
-                                    <input type="radio" name="radio-LFO2" class="lfo2ShapeRadios triangle" id="triangleButton2">
-                                    <label for="squareButton2">square</label>
-                                    <input type="radio" name="radio-LFO2" class="lfo2ShapeRadios square" id="squareButton2">
-                                    <label for="sawtoothButton2">sawtooth</label>
-                                    <input type="radio" name="radio-LFO2" class="lfo2ShapeRadios sawtooth" id="sawtoothButton2">
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-2">
-                                    <label for="lfo2FreqAmount" class="text-center w-100">FREQUENCY</label>
-                                    <input type="text" class="sliderValBox text-center w-100" id="lfo2FreqAmount" readonly>
-                                </div>
-                                <div class="col-9">
-                                    <div id="lfo2FreqSlider" class="slider"></div>
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-2">
-                                    <label for="lfo2AmpAmount" class="text-center w-100">AMPLITUDE</label>
-                                    <input type="text" class="sliderValBox text-center w-100" id="lfo2AmpAmount" readonly>
-                                </div>
-                                <div class="col-9">
-                                    <div id="lfo2AmpSlider" class="slider"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- DELAY MIX -->
-                <div class="row mb-3">
-                    <div class="col-2">
-                        <label for="delayWetAmount" class="text-center w-100">DELAY MIX:</label>
-                        <input type="text" class="sliderValBox text-center w-100" id="delayWetAmount" readonly>
-                    </div>
-                    <div class="col-9">
-                        <div id="delayWetSlider" class="slider"></div>
-                    </div>
-                    <div class="col-1">
-                        <button class="btn btn-secondary" type="button" data-toggle="collapse" data-target="#lfo3Collapse" aria-expanded="false" aria-controls="lfo3Collapse">
-                          LFO
-                        </button>
-                    </div>
-                </div>
-                <!-- LFO THREE -->
-                <div class="row mb-3">
-                    <div class="collapse col-9 offset-2" id="lfo3Collapse">
-                        <div class="card card-body">
-                            <div class="row mb-3">
-                                <div class="col-2">
-                                    <div class="reverseBox mx-auto">
-                                        <label for="lfo3-onOff" class="mb-0">On/Off</label>
-                                        <input type="checkbox" name="checkbox-3" id="lfo3-onOff">
-                                    </div>
-                                </div>
-                                <div class="col-9 widget d-flex justify-content-around">
-                                    <label for="sineButton3">sine</label>
-                                    <input type="radio" name="radio-LFO3" class="lfo3ShapeRadios sine" id="sineButton3">
-                                    <label for="triangleButton3">triangle</label>
-                                    <input type="radio" name="radio-LFO3" class="lfo3ShapeRadios triangle" id="triangleButton3">
-                                    <label for="squareButton3">square</label>
-                                    <input type="radio" name="radio-LFO3" class="lfo3ShapeRadios square" id="squareButton3">
-                                    <label for="sawtoothButton3">sawtooth</label>
-                                    <input type="radio" name="radio-LFO3" class="lfo3ShapeRadios sawtooth" id="sawtoothButton3">
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-2">
-                                    <label for="lfo3FreqAmount" class="text-center w-100">FREQUENCY</label>
-                                    <input type="text" class="sliderValBox text-center w-100" id="lfo3FreqAmount" readonly>
-                                </div>
-                                <div class="col-9">
-                                    <div id="lfo3FreqSlider" class="slider"></div>
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-2">
-                                    <label for="lfo3AmpAmount" class="text-center w-100">AMPLITUDE</label>
-                                    <input type="text" class="sliderValBox text-center w-100" id="lfo3AmpAmount" readonly>
-                                </div>
-                                <div class="col-9">
-                                    <div id="lfo3AmpSlider" class="slider"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- DELAY TIME -->
-                <div class="row mb-3">
-                    <div class="col-2">
-                        <label for="delayTimeAmount" class="text-center w-100">DELAY TIME:</label>
-                        <input type="text" class="sliderValBox text-center w-100" id="delayTimeAmount" readonly>
-                    </div>
-                    <div class="col-9">
-                        <div id="delayTimeSlider" class="slider"></div>
-                    </div>
-                    <div class="col-1">
-                        <button class="btn btn-secondary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-                          LFO
-                        </button>
-                    </div>
-                </div>
-                <!-- LFO FOUR -->
-                <div class="row mb-3">
-                    <div class="collapse col-9 offset-2" id="collapseExample">
-                        <div class="card card-body">
-                            <div class="row mb-3">
-                                <div class="col-2">
-                                    <div class="reverseBox mx-auto">
-                                        <label for="lfo4-onOff" class="mb-0">On/Off</label>
-                                        <input type="checkbox" name="checkbox-1" id="lfo4-onOff">
-                                    </div>
-                                </div>
-                                <div class="col-9 widget d-flex justify-content-around">
-                                    <label for="sineButton4">sine</label>
-                                    <input type="radio" name="radio-LFO4" class="lfo4ShapeRadios sine" id="sineButton4">
-                                    <label for="triangleButton4">triangle</label>
-                                    <input type="radio" name="radio-LFO4" class="lfo4ShapeRadios triangle" id="triangleButton4">
-                                    <label for="squareButton4">square</label>
-                                    <input type="radio" name="radio-LFO4" class="lfo4ShapeRadios square" id="squareButton4">
-                                    <label for="sawtoothButton4">sawtooth</label>
-                                    <input type="radio" name="radio-LFO4" class="lfo4ShapeRadios sawtooth" id="sawtoothButton4">
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-2">
-                                    <label for="lfo4FreqAmount" class="text-center w-100">FREQUENCY</label>
-                                    <input type="text" class="sliderValBox text-center w-100" id="lfo4FreqAmount" readonly>
-                                </div>
-                                <div class="col-9">
-                                    <div id="lfo4FreqSlider" class="slider"></div>
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-2">
-                                    <label for="lfo4AmpAmount" class="text-center w-100">AMPLITUDE</label>
-                                    <input type="text" class="sliderValBox text-center w-100" id="lfo4AmpAmount" readonly>
-                                </div>
-                                <div class="col-9">
-                                    <div id="lfo4AmpSlider" class="slider"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- DELAY FEEDBACK -->
-                <div class="row mb-3">
-                    <div class="col-2">
-                        <label for="delayFeedbackAmount" class="text-center w-100">DELAY FEEDBACK:</label>
-                        <input type="text" class="sliderValBox text-center w-100" id="delayFeedbackAmount" readonly>
-                    </div>
-                    <div class="col-9">
-                        <div id="delayFeedbackSlider" class="slider"></div>
-                    </div>
-                    <div class="col-1">
-                        <button class="btn btn-secondary" type="button" data-toggle="collapse" data-target="#lfo5Collapse" aria-expanded="false" aria-controls="lfo5Collapse">
-                          LFO
-                        </button>
-                    </div>
-                </div>
-                <!-- LFO FIVE -->
-                <div class="row mb-3">
-                    <div class="collapse col-9 offset-2" id="lfo5Collapse">
-                        <div class="card card-body">
-                            <div class="row mb-3">
-                                <div class="col-2">
-                                    <div class="reverseBox mx-auto">
-                                        <label for="lfo5-onOff" class="mb-0">On/Off</label>
-                                        <input type="checkbox" name="checkbox-5" id="lfo5-onOff">
-                                    </div>
-                                </div>
-                                <div class="col-9 widget d-flex justify-content-around">
-                                    <label for="sineButton5">sine</label>
-                                    <input type="radio" name="radio-LFO5" class="lfo5ShapeRadios sine" id="sineButton5">
-                                    <label for="triangleButton5">triangle</label>
-                                    <input type="radio" name="radio-LFO5" class="lfo5ShapeRadios triangle" id="triangleButton5">
-                                    <label for="squareButton5">square</label>
-                                    <input type="radio" name="radio-LFO5" class="lfo5ShapeRadios square" id="squareButton5">
-                                    <label for="sawtoothButton5">sawtooth</label>
-                                    <input type="radio" name="radio-LFO5" class="lfo5ShapeRadios sawtooth" id="sawtoothButton5">
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-2">
-                                    <label for="lfo5FreqAmount" class="text-center w-100">FREQUENCY</label>
-                                    <input type="text" class="sliderValBox text-center w-100" id="lfo5FreqAmount" readonly>
-                                </div>
-                                <div class="col-9">
-                                    <div id="lfo5FreqSlider" class="slider"></div>
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-2">
-                                    <label for="lfo5AmpAmount" class="text-center w-100">AMPLITUDE</label>
-                                    <input type="text" class="sliderValBox text-center w-100" id="lfo5AmpAmount" readonly>
-                                </div>
-                                <div class="col-9">
-                                    <div id="lfo5AmpSlider" class="slider"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- REVERB MIX -->
-                <div class="row mb-3">
-                    <div class="col-2">
-                        <label for="reverbWetAmount" class="text-center w-100">REVERB MIX:</label>
-                        <input type="text" class="sliderValBox text-center w-100" id="reverbWetAmount" readonly>
-                    </div>
-                    <div class="col-9">
-                        <div id="reverbWetSlider" class="slider"></div>
-                    </div>
-                    <div class="col-1">
-                        <button class="btn btn-secondary" type="button" data-toggle="collapse" data-target="#lfo6Collapse" aria-expanded="false" aria-controls="lfo6Collapse">
-                          LFO
-                        </button>
-                    </div>
-                </div>
-                <!-- LFO SIX -->
-                <div class="row mb-3">
-                    <div class="collapse col-9 offset-2" id="lfo6Collapse">
-                        <div class="card card-body">
-                            <div class="row mb-3">
-                                <div class="col-2">
-                                    <div class="reverseBox mx-auto">
-                                        <label for="lfo6-onOff" class="mb-0">On/Off</label>
-                                        <input type="checkbox" name="checkbox-6" id="lfo6-onOff">
-                                    </div>
-                                </div>
-                                <div class="col-9 widget d-flex justify-content-around">
-                                    <label for="sineButton6">sine</label>
-                                    <input type="radio" name="radio-LFO6" class="lfo6ShapeRadios sine" id="sineButton6">
-                                    <label for="triangleButton6">triangle</label>
-                                    <input type="radio" name="radio-LFO6" class="lfo6ShapeRadios triangle" id="triangleButton6">
-                                    <label for="squareButton6">square</label>
-                                    <input type="radio" name="radio-LFO6" class="lfo6ShapeRadios square" id="squareButton6">
-                                    <label for="sawtoothButton6">sawtooth</label>
-                                    <input type="radio" name="radio-LFO6" class="lfo6ShapeRadios sawtooth" id="sawtoothButton6">
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-2">
-                                    <label for="lfo6FreqAmount" class="text-center w-100">FREQUENCY</label>
-                                    <input type="text" class="sliderValBox text-center w-100" id="lfo6FreqAmount" readonly>
-                                </div>
-                                <div class="col-9">
-                                    <div id="lfo6FreqSlider" class="slider"></div>
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-2">
-                                    <label for="lfo6AmpAmount" class="text-center w-100">AMPLITUDE</label>
-                                    <input type="text" class="sliderValBox text-center w-100" id="lfo6AmpAmount" readonly>
-                                </div>
-                                <div class="col-9">
-                                    <div id="lfo6AmpSlider" class="slider"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- REVERB ROOM SIZE -->
-                <div class="row mb-3">
-                    <div class="col-2">
-                        <label for="reverbTimeAmount" class="text-center w-100">REVERB ROOM SIZE:</label>
-                        <input type="text" class="sliderValBox text-center w-100" id="reverbTimeAmount" readonly>
-                    </div>
-                    <div class="col-9">
-                        <div id="reverbTimeSlider" class="slider"></div>
-                    </div>
-                    <div class="col-1">
-                        <button class="btn btn-secondary" type="button" data-toggle="collapse" data-target="#lfo7Collapse" aria-expanded="false" aria-controls="lfo7Collapse">
-                          LFO
-                        </button>
-                    </div>
-                </div>
-                <!-- LFO SEVEN -->
-                <div class="row mb-3">
-                    <div class="collapse col-9 offset-2" id="lfo7Collapse">
-                        <div class="card card-body">
-                            <div class="row mb-3">
-                                <div class="col-2">
-                                    <div class="reverseBox mx-auto">
-                                        <label for="lfo7-onOff" class="mb-0">On/Off</label>
-                                        <input type="checkbox" name="checkbox-7" id="lfo7-onOff">
-                                    </div>
-                                </div>
-                                <div class="col-9 widget d-flex justify-content-around">
-                                    <label for="sineButton7">sine</label>
-                                    <input type="radio" name="radio-LFO7" class="lfo7ShapeRadios sine" id="sineButton7">
-                                    <label for="triangleButton7">triangle</label>
-                                    <input type="radio" name="radio-LFO7" class="lfo7ShapeRadios triangle" id="triangleButton7">
-                                    <label for="squareButton7">square</label>
-                                    <input type="radio" name="radio-LFO7" class="lfo7ShapeRadios square" id="squareButton7">
-                                    <label for="sawtoothButton7">sawtooth</label>
-                                    <input type="radio" name="radio-LFO7" class="lfo7ShapeRadios sawtooth" id="sawtoothButton7">
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-2">
-                                    <label for="lfo7FreqAmount" class="text-center w-100">FREQUENCY</label>
-                                    <input type="text" class="sliderValBox text-center w-100" id="lfo7FreqAmount" readonly>
-                                </div>
-                                <div class="col-9">
-                                    <div id="lfo7FreqSlider" class="slider"></div>
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-2">
-                                    <label for="lfo7AmpAmount" class="text-center w-100">AMPLITUDE</label>
-                                    <input type="text" class="sliderValBox text-center w-100" id="lfo7AmpAmount" readonly>
-                                </div>
-                                <div class="col-9">
-                                    <div id="lfo7AmpSlider" class="slider"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- REVERB DAMPING -->
-                <div class="row mb-3">
-                    <div class="col-2">
-                        <label for="reverbDampAmount" class="text-center w-100">REVERB DAMPING:</label>
-                        <input type="text" class="sliderValBox text-center w-100" id="reverbDampAmount" readonly>
-                    </div>
-                    <div class="col-9">
-                        <div id="reverbDampSlider" class="slider"></div>
-                    </div>
-                    <div class="col-1">
-                        <button class="btn btn-secondary" type="button" data-toggle="collapse" data-target="#lfo8Collapse" aria-expanded="false" aria-controls="lfo8Collapse">
-                          LFO
-                        </button>
-                    </div>
-                </div>
-                <!-- LFO EIGHT -->
-                <div class="row mb-3">
-                    <div class="collapse col-8 offset-2" id="lfo8Collapse">
-                        <div class="card card-body">
-                            <div class="row mb-3">
-                                <div class="col-2">
-                                    <div class="reverseBox mx-auto">
-                                        <label for="lfo8-onOff" class="mb-0">On/Off</label>
-                                        <input type="checkbox" name="checkbox-8" id="lfo8-onOff">
-                                    </div>
-                                </div>
-                                <div class="col-8 widget d-flex justify-content-around">
-                                    <label for="sineButton8">sine</label>
-                                    <input type="radio" name="radio-LFO8" class="lfo8ShapeRadios sine" id="sineButton8">
-                                    <label for="triangleButton8">triangle</label>
-                                    <input type="radio" name="radio-LFO8" class="lfo8ShapeRadios triangle" id="triangleButton8">
-                                    <label for="squareButton8">square</label>
-                                    <input type="radio" name="radio-LFO8" class="lfo8ShapeRadios square" id="squareButton8">
-                                    <label for="sawtoothButton8">sawtooth</label>
-                                    <input type="radio" name="radio-LFO8" class="lfo8ShapeRadios sawtooth" id="sawtoothButton8">
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-2">
-                                    <label for="lfo8FreqAmount" class="text-center w-100">FREQUENCY</label>
-                                    <input type="text" class="sliderValBox text-center w-100" id="lfo8FreqAmount" readonly>
-                                </div>
-                                <div class="col-8">
-                                    <div id="lfo8FreqSlider" class="slider"></div>
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-2">
-                                    <label for="lfo8AmpAmount" class="text-center w-100">AMPLITUDE</label>
-                                    <input type="text" class="sliderValBox text-center w-100" id="lfo8AmpAmount" readonly>
-                                </div>
-                                <div class="col-8">
-                                    <div id="lfo8AmpSlider" class="slider"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </section>
-
-
+      <!--PLAYER SECTION-->
+      <section class="firstSection ui-corner-all" id="tabs-1">
+        <!-- Player Buttons -->
+        <div class="row mb-4" id="sampleButtonGroup">
+          <div class="col-4 offset-4 d-flex justify-content-between align-items-end">
+            <div>
+              <label for="startButton" class="mb-0 bg-dark text-white">Play</label>
+              <input type="checkbox" name="startButton" id="startButton">
+            </div>
+            <div>
+              <label for="reverseButton" class="mb-0 bg-dark text-white">Reverse</label>
+              <input type="checkbox" name="reverseButton" id="reverseButton">
+            </div>
+            <div>
+              <label for="recordButton" class="mb-0 bg-dark text-white">Record</label>
+              <input type="checkbox" name="recordButton" id="recordButton">
+            </div>
+          </div>
         </div>
+        <!-- Player Sliders -->
+        <div class="mb-5" id="sampleSliderGroup">
+          <!-- Loop Slider -->
+          <div class="row mb-4">
+            <div class="col-8 offset-2">
+              <div class="mb-3 w-25 d-flex align-items-center">
+                <h6 class="my-2 text-center border-bottom">LOOP</h6>
+              </div>
+              <div id="rangeSlider" class="slider">
+                <div id="rangeHandle1" class="custom-handle ui-slider-handle"></div>
+                <div id="rangeHandle2" class="custom-handle ui-slider-handle"></div>
+              </div>
+            </div>
+          </div>
+          <!-- Detune SLider -->
+          <div class="row mb-4">
+            <div class="col-8 offset-2">
+              <div class="mb-3 w-25 d-flex align-items-center">
+                <h6 class="my-2 text-center border-bottom">DETUNE</h6>
+              </div>
+              <div id="detuneSlider" class="slider">
+                <div id="detuneHandle" class="custom-handle ui-slider-handle"></div>
+              </div>
+            </div>
+
+          </div>
+          <!-- Rate Slider -->
+          <div class="row mb-4">
+            <div class="col-8 offset-2">
+              <div class="mb-3 w-25 d-flex align-items-center">
+                <h6 class="my-2 text-center border-bottom">RATE</h6>
+              </div>
+              <div id="rateSlider" class="slider">
+                <div id="rateHandle" class="custom-handle ui-slider-handle"></div>
+              </div>
+            </div>
+          </div>
+          <!-- Grain Slider -->
+          <div class="row mb-4">
+            <div class="col-8 offset-2">
+              <div class="mb-3 w-25 d-flex align-items-center">
+                <h6 class="my-2 text-center border-bottom">GRAIN SIZE</h6>
+              </div>
+              <div id="grainSizeSlider" class="slider">
+                <div id="grainHandle" class="custom-handle ui-slider-handle"></div>
+              </div>
+            </div>
+          </div>
+          <!-- Overlap Slider -->
+          <div class="row mb-4">
+            <div class="col-8 offset-2">
+              <div class="mb-3 w-25 d-flex align-items-center">
+                <h6 class="my-2 text-center border-bottom">OVERLAP</h6>
+              </div>
+              <div id="overlapSlider" class="slider">
+                <div id="overlapHandle" class="custom-handle ui-slider-handle"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Drop Zone -->
+        <div class="row" id="dropZone">
+          <div class="col-8 offset-2">
+            <p class="ui-corner-all text-center border" style="padding: 15px">Drop File Here</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- FX SECTION -->
+      <section class="secondSection ui-corner-all" id="tabs-2">
+        <!-- FILTER SELECTOR -->
+        <div class="row flex-end py-2">
+          <div class="col-8 offset-2">
+            <div class="">
+              <div class=" w-25 mb-3 d-flex align-items-center">
+                <h6 class="text-center mb-0 border-bottom">FILTER TYPE</h6>
+              </div>
+              <div class="d-flex w-50 justify-content-between">
+                <label class="h-100 bg-dark text-white ui-corner-all" for="lowpass">lowpass</label>
+                <input type="radio" name="radio-1" class="filterTypeRadios" id="lowpass">
+                <label class="h-100 bg-dark text-white ui-corner-all" for="highpass">highpass</label>
+                <input type="radio" name="radio-1" class="filterTypeRadios" id="highpass">
+                <label class="h-100 bg-dark text-white ui-corner-all" for="bandpass">bandpass</label>
+                <input type="radio" name="radio-1" class="filterTypeRadios" id="bandpass">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- FILTER FREQUENCY -->
+        <div class="row mb-2 flex-end py-2">
+          <div class="col-8 offset-2">
+            <div class="d-flex justify-content-between">
+              <div class="mb-3 w-50 d-flex align-items-center">
+                <h6 class="text-center mb-0 border-bottom">FILTER FREQUENCY</h6>
+              </div>
+              <button class="mb-3 btn btn-secondary w-10" type="button" data-toggle="collapse" data-target="#lfo1Collapse" aria-expanded="false" aria-controls="lfo1Collapse">LFO</button>
+            </div>
+            <div id="filterFreqSlider" class="slider"></div>
+          </div>
+        </div>
+        <!-- LFO ONE -->
+        <div class="row mb-2">
+          <div class="collapse col-8 offset-2" id="lfo1Collapse">
+            <div class="card card-body">
+              <div class="row mb-3 d-flex align-items-start">
+                <div class="col-2">
+                  <div class="reverseBox mx-auto">
+                    <label for="lfo1-onOff" class="mb-0">on</label>
+                    <input type="checkbox" name="checkbox-1" id="lfo1-onOff">
+                  </div>
+                </div>
+                <div class="col-9 widget d-flex justify-content-around">
+                  <label for="sineButton1">sine</label>
+                  <input type="radio" name="radio-LFO1" class="lfo1ShapeRadios sine" id="sineButton1">
+                  <label for="triangleButton1">triangle</label>
+                  <input type="radio" name="radio-LFO1" class="lfo1ShapeRadios triangle" id="triangleButton1">
+                  <label for="squareButton1">square</label>
+                  <input type="radio" name="radio-LFO1" class="lfo1ShapeRadios square" id="squareButton1">
+                  <label for="sawtoothButton1">sawtooth</label>
+                  <input type="radio" name="radio-LFO1" class="lfo1ShapeRadios sawtooth" id="sawtoothButton1">
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-2">
+                  <label for="lfo1FreqAmount" class="text-center w-100">FREQUENCY</label>
+                  <input type="text" class="sliderValBox text-center w-100" id="lfo1FreqAmount" readonly>
+                </div>
+                <div class="col-9">
+                  <div id="lfo1FreqSlider" class="slider"></div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-2">
+                  <label for="lfo1AmpAmount" class="text-center w-100">AMPLITUDE</label>
+                  <input type="text" class="sliderValBox text-center w-100" id="lfo1AmpAmount" readonly>
+                </div>
+                <div class="col-9">
+                  <div id="lfo1AmpSlider" class="slider"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- FILTER RESONANCE -->
+        <div class="row mb-2 flex-end py-2">
+          <div class="col-8 offset-2">
+            <div class="d-flex justify-content-between">
+              <div class="mb-3 w-50 d-flex align-items-center">
+                <h6 class="text-center mb-0 border-bottom">FILTER RESONANCE</h6>
+              </div>
+              <button class="btn btn-secondary mb-3 w-10" type="button" data-toggle="collapse" data-target="#lfo2Collapse" aria-expanded="false" aria-controls="lfo2Collapse">LFO</button>
+            </div>
+
+            <div id="filterQSlider" class="slider"></div>
+          </div>
+        </div>
+        <!-- LFO TWO -->
+        <div class="row mb-2">
+          <div class="collapse col-8 offset-2" id="lfo2Collapse">
+            <div class="card card-body">
+              <div class="row mb-3 d-flex align-items-start">
+                <div class="col-2">
+                  <div class="reverseBox mx-auto">
+                    <label for="lfo2-onOff" class="mb-0">on</label>
+                    <input type="checkbox" name="checkbox-2" id="lfo2-onOff">
+                  </div>
+                </div>
+                <div class="col-9 widget d-flex justify-content-around">
+                  <label for="sineButton2">sine</label>
+                  <input type="radio" name="radio-LFO2" class="lfo2ShapeRadios sine" id="sineButton2">
+                  <label for="triangleButton2">triangle</label>
+                  <input type="radio" name="radio-LFO2" class="lfo2ShapeRadios triangle" id="triangleButton2">
+                  <label for="squareButton2">square</label>
+                  <input type="radio" name="radio-LFO2" class="lfo2ShapeRadios square" id="squareButton2">
+                  <label for="sawtoothButton2">sawtooth</label>
+                  <input type="radio" name="radio-LFO2" class="lfo2ShapeRadios sawtooth" id="sawtoothButton2">
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-2">
+                  <label for="lfo2FreqAmount" class="text-center w-100">FREQUENCY</label>
+                  <input type="text" class="sliderValBox text-center w-100" id="lfo2FreqAmount" readonly>
+                </div>
+                <div class="col-9">
+                  <div id="lfo2FreqSlider" class="slider"></div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-2">
+                  <label for="lfo2AmpAmount" class="text-center w-100">AMPLITUDE</label>
+                  <input type="text" class="sliderValBox text-center w-100" id="lfo2AmpAmount" readonly>
+                </div>
+                <div class="col-9">
+                  <div id="lfo2AmpSlider" class="slider"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- DELAY MIX -->
+        <div class="row mb-2 flex-end py-2">
+          <div class="col-8 offset-2">
+            <div class="d-flex justify-content-between">
+              <div class="mb-3 w-50 d-flex align-items-center">
+                <h6 class="mb-0 text-center border-bottom">DELAY MIX</h6>
+              </div>
+              <button class="mb-3 w-10 btn btn-secondary" type="button" data-toggle="collapse" data-target="#lfo3Collapse" aria-expanded="false" aria-controls="lfo3Collapse">LFO</button>
+            </div>
+            <div id="delayWetSlider" class="slider"></div>
+          </div>
+        </div>
+        <!-- LFO THREE -->
+        <div class="row mb-2">
+          <div class="collapse col-8 offset-2" id="lfo3Collapse">
+            <div class="card card-body">
+              <div class="row mb-3 d-flex align-items-start">
+                <div class="col-2">
+                  <div class="reverseBox mx-auto">
+                    <label for="lfo3-onOff" class="mb-0">on</label>
+                    <input type="checkbox" name="checkbox-3" id="lfo3-onOff">
+                  </div>
+                </div>
+                <div class="col-8 widget d-flex justify-content-around">
+                  <label for="sineButton3">sine</label>
+                  <input type="radio" name="radio-LFO3" class="lfo3ShapeRadios sine" id="sineButton3">
+                  <label for="triangleButton3">triangle</label>
+                  <input type="radio" name="radio-LFO3" class="lfo3ShapeRadios triangle" id="triangleButton3">
+                  <label for="squareButton3">square</label>
+                  <input type="radio" name="radio-LFO3" class="lfo3ShapeRadios square" id="squareButton3">
+                  <label for="sawtoothButton3">sawtooth</label>
+                  <input type="radio" name="radio-LFO3" class="lfo3ShapeRadios sawtooth" id="sawtoothButton3">
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-2">
+                  <label for="lfo3FreqAmount" class="text-center w-100">FREQUENCY</label>
+                  <input type="text" class="sliderValBox text-center w-100" id="lfo3FreqAmount" readonly>
+                </div>
+                <div class="col-9">
+                  <div id="lfo3FreqSlider" class="slider"></div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-2">
+                  <label for="lfo3AmpAmount" class="text-center w-100">AMPLITUDE</label>
+                  <input type="text" class="sliderValBox text-center w-100" id="lfo3AmpAmount" readonly>
+                </div>
+                <div class="col-9">
+                  <div id="lfo3AmpSlider" class="slider"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- DELAY TIME -->
+        <div class="row mb-2 flex-end py-2">
+          <div class="col-8 offset-2">
+            <div class="d-flex justify-content-between">
+              <div class="mb-3 w-50 d-flex align-items-center">
+                <h6 class="mb-0 text-center border-bottom">DELAY TIME</h6>
+              </div>
+              <button class="mb-3 w-10 btn btn-secondary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">LFO</button>
+            </div>
+            <div id="delayTimeSlider" class="slider"></div>
+          </div>
+        </div>
+        <!-- LFO FOUR -->
+        <div class="row mb-2">
+          <div class="collapse col-8 offset-2" id="collapseExample">
+            <div class="card card-body">
+              <div class="row mb-3 d-flex align-items-start">
+                <div class="col-2">
+                  <div class="reverseBox mx-auto">
+                    <label for="lfo4-onOff" class="mb-0">on</label>
+                    <input type="checkbox" name="checkbox-1" id="lfo4-onOff">
+                  </div>
+                </div>
+                <div class="col-8 widget d-flex justify-content-around">
+                  <label for="sineButton4">sine</label>
+                  <input type="radio" name="radio-LFO4" class="lfo4ShapeRadios sine" id="sineButton4">
+                  <label for="triangleButton4">triangle</label>
+                  <input type="radio" name="radio-LFO4" class="lfo4ShapeRadios triangle" id="triangleButton4">
+                  <label for="squareButton4">square</label>
+                  <input type="radio" name="radio-LFO4" class="lfo4ShapeRadios square" id="squareButton4">
+                  <label for="sawtoothButton4">sawtooth</label>
+                  <input type="radio" name="radio-LFO4" class="lfo4ShapeRadios sawtooth" id="sawtoothButton4">
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-2">
+                  <label for="lfo4FreqAmount" class="text-center w-100">FREQUENCY</label>
+                  <input type="text" class="sliderValBox text-center w-100" id="lfo4FreqAmount" readonly>
+                </div>
+                <div class="col-9">
+                  <div id="lfo4FreqSlider" class="slider"></div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-2">
+                  <label for="lfo4AmpAmount" class="text-center w-100">AMPLITUDE</label>
+                  <input type="text" class="sliderValBox text-center w-100" id="lfo4AmpAmount" readonly>
+                </div>
+                <div class="col-9">
+                  <div id="lfo4AmpSlider" class="slider"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- DELAY FEEDBACK -->
+        <div class="row mb-2 flex-end py-2">
+          <div class="col-8 offset-2">
+            <div class="d-flex justify-content-between">
+              <div class="mb-3 w-50 d-flex align-items-center">
+                <h6 class="mb-0 text-center border-bottom">DELAY FEEDBACK</h6>
+              </div>
+              <button class="mb-3 w-10 btn btn-secondary" type="button" data-toggle="collapse" data-target="#lfo5Collapse" aria-expanded="false" aria-controls="lfo5Collapse">LFO</button>
+            </div>
+            <div id="delayFeedbackSlider" class="slider"></div>
+          </div>
+        </div>
+        <!-- LFO FIVE -->
+        <div class="row mb-2">
+          <div class="collapse col-8 offset-2" id="lfo5Collapse">
+            <div class="card card-body">
+              <div class="row mb-3 d-flex align-items-start">
+                <div class="col-2">
+                  <div class="reverseBox mx-auto">
+                    <label for="lfo5-onOff" class="mb-0">on</label>
+                    <input type="checkbox" name="checkbox-5" id="lfo5-onOff">
+                  </div>
+                </div>
+                <div class="col-9 widget d-flex justify-content-around">
+                  <label for="sineButton5">sine</label>
+                  <input type="radio" name="radio-LFO5" class="lfo5ShapeRadios sine" id="sineButton5">
+                  <label for="triangleButton5">triangle</label>
+                  <input type="radio" name="radio-LFO5" class="lfo5ShapeRadios triangle" id="triangleButton5">
+                  <label for="squareButton5">square</label>
+                  <input type="radio" name="radio-LFO5" class="lfo5ShapeRadios square" id="squareButton5">
+                  <label for="sawtoothButton5">sawtooth</label>
+                  <input type="radio" name="radio-LFO5" class="lfo5ShapeRadios sawtooth" id="sawtoothButton5">
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-2">
+                  <label for="lfo5FreqAmount" class="text-center w-100">FREQUENCY</label>
+                  <input type="text" class="sliderValBox text-center w-100" id="lfo5FreqAmount" readonly>
+                </div>
+                <div class="col-9">
+                  <div id="lfo5FreqSlider" class="slider"></div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-2">
+                  <label for="lfo5AmpAmount" class="text-center w-100">AMPLITUDE</label>
+                  <input type="text" class="sliderValBox text-center w-100" id="lfo5AmpAmount" readonly>
+                </div>
+                <div class="col-9">
+                  <div id="lfo5AmpSlider" class="slider"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- REVERB MIX -->
+        <div class="row mb-2 flex-end py-2">
+          <div class="col-8 offset-2">
+            <div class="d-flex justify-content-between">
+              <div class="mb-3 w-50 d-flex align-items-center">
+                <h6 class="mb-0 text-center border-bottom">REVERB MIX</h6>
+              </div>
+              <button class="mb-3 w-10 btn btn-secondary" type="button" data-toggle="collapse" data-target="#lfo6Collapse" aria-expanded="false" aria-controls="lfo6Collapse">LFO</button>
+            </div>
+            <div id="reverbWetSlider" class="slider"></div>
+          </div>
+        </div>
+        <!-- LFO SIX -->
+        <div class="row mb-2">
+          <div class="collapse col-8 offset-2" id="lfo6Collapse">
+            <div class="card card-body">
+              <div class="row mb-3 d-flex align-items-start">
+                <div class="col-2">
+                  <div class="reverseBox mx-auto">
+                    <label for="lfo6-onOff" class="mb-0">on</label>
+                    <input type="checkbox" name="checkbox-6" id="lfo6-onOff">
+                  </div>
+                </div>
+                <div class="col-9 widget d-flex justify-content-around">
+                  <label for="sineButton6">sine</label>
+                  <input type="radio" name="radio-LFO6" class="lfo6ShapeRadios sine" id="sineButton6">
+                  <label for="triangleButton6">triangle</label>
+                  <input type="radio" name="radio-LFO6" class="lfo6ShapeRadios triangle" id="triangleButton6">
+                  <label for="squareButton6">square</label>
+                  <input type="radio" name="radio-LFO6" class="lfo6ShapeRadios square" id="squareButton6">
+                  <label for="sawtoothButton6">sawtooth</label>
+                  <input type="radio" name="radio-LFO6" class="lfo6ShapeRadios sawtooth" id="sawtoothButton6">
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-2">
+                  <label for="lfo6FreqAmount" class="text-center w-100">FREQUENCY</label>
+                  <input type="text" class="sliderValBox text-center w-100" id="lfo6FreqAmount" readonly>
+                </div>
+                <div class="col-9">
+                  <div id="lfo6FreqSlider" class="slider"></div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-2">
+                  <label for="lfo6AmpAmount" class="text-center w-100">AMPLITUDE</label>
+                  <input type="text" class="sliderValBox text-center w-100" id="lfo6AmpAmount" readonly>
+                </div>
+                <div class="col-9">
+                  <div id="lfo6AmpSlider" class="slider"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- REVERB ROOM SIZE -->
+        <div class="row mb-2 flex-end py-2">
+          <div class="col-8 offset-2">
+            <div class="d-flex justify-content-between">
+              <div class="mb-3 w-50 d-flex align-items-center">
+                <h6 class="mb-0 text-center border-bottom">REVERB SIZE</h6>
+              </div>
+              <button class="mb-3 w-10 btn btn-secondary" type="button" data-toggle="collapse" data-target="#lfo7Collapse" aria-expanded="false" aria-controls="lfo7Collapse">LFO</button>
+            </div>
+            <div id="reverbTimeSlider" class="slider"></div>
+          </div>
+        </div>
+        <!-- LFO SEVEN -->
+        <div class="row mb-2">
+          <div class="collapse col-8 offset-2" id="lfo7Collapse">
+            <div class="card card-body">
+              <div class="row mb-3 d-flex align-items-start">
+                <div class="col-2">
+                  <div class="reverseBox mx-auto">
+                    <label for="lfo7-onOff" class="mb-0">on</label>
+                    <input type="checkbox" name="checkbox-7" id="lfo7-onOff">
+                  </div>
+                </div>
+                <div class="col-9 widget d-flex justify-content-around">
+                  <label for="sineButton7">sine</label>
+                  <input type="radio" name="radio-LFO7" class="lfo7ShapeRadios sine" id="sineButton7">
+                  <label for="triangleButton7">triangle</label>
+                  <input type="radio" name="radio-LFO7" class="lfo7ShapeRadios triangle" id="triangleButton7">
+                  <label for="squareButton7">square</label>
+                  <input type="radio" name="radio-LFO7" class="lfo7ShapeRadios square" id="squareButton7">
+                  <label for="sawtoothButton7">sawtooth</label>
+                  <input type="radio" name="radio-LFO7" class="lfo7ShapeRadios sawtooth" id="sawtoothButton7">
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-2">
+                  <label for="lfo7FreqAmount" class="text-center w-100">FREQUENCY</label>
+                  <input type="text" class="sliderValBox text-center w-100" id="lfo7FreqAmount" readonly>
+                </div>
+                <div class="col-9">
+                  <div id="lfo7FreqSlider" class="slider"></div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-2">
+                  <label for="lfo7AmpAmount" class="text-center w-100">AMPLITUDE</label>
+                  <input type="text" class="sliderValBox text-center w-100" id="lfo7AmpAmount" readonly>
+                </div>
+                <div class="col-9">
+                  <div id="lfo7AmpSlider" class="slider"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- REVERB DAMPING -->
+        <div class="row mb-2 flex-end py-2">
+          <div class="col-8 offset-2">
+            <div class="d-flex justify-content-between">
+              <div class="mb-3 w-50 d-flex align-items-center">
+                <h6 class="mb-0 text-center border-bottom">REVERB DAMPING</h6>
+              </div>
+              <button class="mb-3 w-10 btn btn-secondary" type="button" data-toggle="collapse" data-target="#lfo8Collapse" aria-expanded="false" aria-controls="lfo8Collapse">LFO</button>
+            </div>
+            <div id="reverbDampSlider" class="slider"></div>
+          </div>
+        </div>
+        <!-- LFO EIGHT -->
+        <div class="row mb-2">
+          <div class="collapse col-8 offset-2" id="lfo8Collapse">
+            <div class="card card-body">
+              <div class="row mb-3 d-flex align-items-start">
+                <div class="col-2">
+                  <div class="reverseBox mx-auto">
+                    <label for="lfo8-onOff" class="mb-0">on</label>
+                    <input type="checkbox" name="checkbox-8" id="lfo8-onOff">
+                  </div>
+                </div>
+                <div class="col-8 widget d-flex justify-content-around">
+                  <label for="sineButton8">sine</label>
+                  <input type="radio" name="radio-LFO8" class="lfo8ShapeRadios sine" id="sineButton8">
+                  <label for="triangleButton8">triangle</label>
+                  <input type="radio" name="radio-LFO8" class="lfo8ShapeRadios triangle" id="triangleButton8">
+                  <label for="squareButton8">square</label>
+                  <input type="radio" name="radio-LFO8" class="lfo8ShapeRadios square" id="squareButton8">
+                  <label for="sawtoothButton8">sawtooth</label>
+                  <input type="radio" name="radio-LFO8" class="lfo8ShapeRadios sawtooth" id="sawtoothButton8">
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-2">
+                  <label for="lfo8FreqAmount" class="text-center w-100">FREQUENCY</label>
+                  <input type="text" class="sliderValBox text-center w-100" id="lfo8FreqAmount" readonly>
+                </div>
+                <div class="col-9">
+                  <div id="lfo8FreqSlider" class="slider"></div>
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-2">
+                  <label for="lfo8AmpAmount" class="text-center w-100">AMPLITUDE</label>
+                  <input type="text" class="sliderValBox text-center w-100" id="lfo8AmpAmount" readonly>
+                </div>
+                <div class="col-9">
+                  <div id="lfo8AmpSlider" class="slider"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
+  </div>
+  <audio controls></audio>
 </body>
 
 </html>
